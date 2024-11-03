@@ -1,4 +1,78 @@
 import argparse
+import csv
+import os
+import random
+
+
+def wykonaj(miesiace, dni, pory, tryb):
+    dni_tyg = ["pn", "wt", "sr", "cz", "pt", "sb", "nd"]
+    if len(miesiace) != len(dni):
+        print("Liczba dni tygodnia różna od liczby miesięcy")
+        return
+
+    wynik_odczytu = 0
+    i = 0
+    j = 0
+    while i < len(miesiace):
+        if '-' in dni[i]:
+            flaga = False
+
+            for dzien in dni_tyg:
+                if dni[i][:2] == dzien:
+                    flaga = True
+
+                if flaga:
+                    if j > len(pory) - 1:
+                        pora = "r"
+                    else:
+                        pora = pory[j]
+
+                    sciezka = os.path.join(miesiace[i], dzien, pora)
+                    wynik_odczytu += wybor_akcji(tryb, sciezka)
+                    j += 1
+
+                if dni[i][3:5] == dzien:
+                    flaga = False
+        else:
+            if j > len(pory) - 1:
+                pora = "r"
+            else:
+                pora = pory[j]
+
+            sciezka = os.path.join(miesiace[i], dni[i], pora)
+            wynik_odczytu += wybor_akcji(tryb, sciezka)
+            j += 1
+
+        i += 1
+    if not tryb:
+        print(f"Wartosc odczytu: {wynik_odczytu}s")
+
+
+def wybor_akcji(tryb, sciezka):
+    if tryb:
+        utworz_plik(sciezka)
+        return 0
+    else:
+        return odczytaj_plik(sciezka)
+
+def utworz_plik(sciezka):
+    os.makedirs(sciezka, exist_ok=True)
+    plik_csv = os.path.join(sciezka, "dane.csv")
+
+    with open(plik_csv, mode='w', newline='') as file:
+        writer = csv.writer(file, delimiter=';')
+        writer.writerow(['Model', 'Wynik', 'Czas'])
+        model = random.choice(['A', 'B', 'C'])
+        wynik = random.randint(0, 1000)
+        czas = f"{random.randint(0, 1000)}s"
+        writer.writerow([model, wynik, czas])
+
+    print(f"Utworzono plik: {plik_csv}")
+
+
+#TODO
+#def odczytaj_plik(sciezka)
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -43,8 +117,7 @@ def main():
     if args.odczyt:
         tryb = False
 
-    #TODO
-    #wykonaj(args.miesiace, args.dni, args.pory, tryb)
+    wykonaj(args.miesiace, args.dni, args.pory, tryb)
 
 
 if __name__ == '__main__':
