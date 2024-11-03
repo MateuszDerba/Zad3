@@ -3,10 +3,10 @@ import argparse
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-m',
-                        '--miesiece',
+                        '--miesiace',
                         nargs='+',
-                        choices=["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec",
-                                 "sierpień", "wrzesień", "październik", "listopad", "grudzień"],
+                        choices=["styczen", "luty", "marzec", "kwiecien", "maj", "czerwiec", "lipiec",
+                                 "sierpien", "wrzesien", "pazdziernik", "listopad", "grudzien"],
                         help="Wybierz miesiąc (dowolna liczba)"
                         )
     parser.add_argument('-d',
@@ -21,6 +21,7 @@ def main():
                         )
     parser.add_argument('-p',
                         '--pory',
+                        nargs='+',
                         choices=["r", "w"],
                         default="r",
                         help="Wybierz porę dnia"
