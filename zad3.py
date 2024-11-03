@@ -70,8 +70,21 @@ def utworz_plik(sciezka):
     print(f"Utworzono plik: {plik_csv}")
 
 
-#TODO
-#def odczytaj_plik(sciezka)
+def odczytaj_plik(sciezka):
+    os.makedirs(sciezka, exist_ok=True)
+    plik_csv = os.path.join(sciezka, "dane.csv")
+
+    with open(plik_csv, newline='') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=';')
+
+        for row in reader:
+            model = row['Model'].strip()
+            czas = row['Czas'].strip()
+
+            if model == 'A':
+                return int(czas.replace('s', ''))
+
+    return 0
 
 
 def main():
